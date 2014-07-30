@@ -24,19 +24,13 @@ def get_data(name, savedir):
         os.makedirs(directory)
     file_name = '%s/%s/%s' %(url,name,name)
     save_target = directory + name
-    print file_name + data_suffix + " -> " + save_target + data_suffix
+    print name + data_suffix + " -> " + save_target + data_suffix
     data = urllib.urlretrieve(file_name + data_suffix, save_target + data_suffix)
-    print file_name + names_suffix + " -> " + save_target + names_suffix
+    print name + names_suffix + " -> " + save_target + names_suffix
     names = urllib.urlretrieve(file_name + names_suffix, save_target + names_suffix)
 
 def get_cell_str(cell):
     return cell.text.encode('ascii','ignore')#.replace(u'\xa0',u' ').encode('utf-8')
-
-def print_dict(d):
-    for x in d:
-        print x
-        for y in d[x]:
-            print y + ':' + d[x][y]
 
 def get_meta():
     print "Retrieving metadata...",
@@ -62,10 +56,13 @@ def get_meta():
         cells = row.findChildren('td')
         dataset = dict()
         for idx, cell in enumerate(cells[2:], start=0):
-            dataset[cats[idx]] = cell.text.encode('ascii','ignore') #.replace(u'\xa0', u' ')
+            dataset[cats[idx]] = cell.text.encode('ascii','ignore')
         if dataset != {}:
             data.append(dataset)
-    pickle.dump(data, open('sets.p','wb'))
+            
+    outf = open('sets.p','wb')
+    pickle.dump(data, outf)
+    outf.close()
     print " Done."
     return data
     
@@ -82,7 +79,9 @@ def main(argv):
 
     metadata = []
     if os.path.isfile('sets.p'):
-        metadata = pickle.load(open("sets.p","rb"))
+        pckl = open("sets.p","rb")
+        metadata = pickle.load(pckl)
+        pckl.close()
     else:
         metadata = get_meta()
     
@@ -93,9 +92,10 @@ def main(argv):
             sets.append(ds['Name'])
 
     if len(sets) > 0:
-        print "found: " + str(sets)
+        length = len(sets)
+        print "Fetching " + str(length) + " matching dataset" + ('s.' if length > 1 else '.');
     else:
-        print "no matches for " + names[0]
+        print "no matches found for " + names[0]
     
     for n in sets:
         get_data(n, savedir)
