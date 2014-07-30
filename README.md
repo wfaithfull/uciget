@@ -1,7 +1,7 @@
 uciget
 ======
 
-Download datasets from UCI repository using regular expressions
+Download datasets from [UCI repository](http://archive.ics.uci.edu/ml/) using regular expressions
 
 ###usage
 
