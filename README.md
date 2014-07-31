@@ -15,7 +15,7 @@ optional arguments:
   -c CATEGORY         category (default task) [REGEX]
 ```
 
-###usage
+###examples
 
 `python uciget.py ^[Aa].* -d C:\Users\Will\Documents\Data`
 
