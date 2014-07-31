@@ -26,19 +26,14 @@ def get_data(name, savedir):
         os.makedirs(directory)
     file_name = '%s/%s/%s' %(url,name,name)
     save_target = directory + name
-    print file_name + data_suffix + " -> " + save_target + data_suffix
+    print '| ' + name
     data = urllib.urlretrieve(file_name + data_suffix, save_target + data_suffix)
-    print file_name + names_suffix + " -> " + save_target + names_suffix
+    print '| '
     names = urllib.urlretrieve(file_name + names_suffix, save_target + names_suffix)
+    print u'\u25BC'.encode('utf-8')
 
 def get_cell_str(cell):
-    return cell.text.encode('ascii','ignore')#.replace(u'\xa0',u' ').encode('utf-8')
-
-def print_dict(d):
-    for x in d:
-        print x
-        for y in d[x]:
-            print y + ':' + d[x][y]
+    return cell.text.encode('ascii','ignore')
 
 def get_meta():
     print "Retrieving metadata...",
@@ -71,9 +66,7 @@ def get_meta():
     print " Done."
     return data
     
-
-def main(argv):
-    args = parser.parse_args()
+def validate_arguments(args):
     savedir = args.savedir
     names = args.name
     category = args.category
@@ -89,6 +82,13 @@ def main(argv):
     if category is None:
         category = '';
 
+    return names, savedir, category
+
+def main(argv):
+    args = parser.parse_args()
+
+    names, savedir, category = validate_arguments(args)
+    
     metadata = []
     if os.path.isfile('sets.p'):
         metadata = pickle.load(open("sets.p","rb"))
