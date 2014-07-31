@@ -1,17 +1,7 @@
 uciget
 ======
 
-Download datasets from [UCI repository](http://archive.ics.uci.edu/ml/) using regular expressions
-
-###usage
-
-`python uciget.py ^[Aa].* -d C:\Users\Will\Documents\Data`
-
-Downloads all datasets that start with A or a to the specified folder
-
-`python uciget.py -c Classification -d C:\Users\Will\Documents\Data`
-
-Downloads all datasets whose default task is classification to the specified folder
+Download datasets from [UCI repository](http://archive.ics.uci.edu/ml/). Search with regular expressions on name and default task.
 
 ```
 usage: uciget.py [-h] [-n NAME [NAME ...]] [-d SAVEDIR] [-c CATEGORY]
@@ -24,5 +14,17 @@ optional arguments:
   -d SAVEDIR          directory to save downloaded files
   -c CATEGORY         category (default task) [REGEX]
 ```
+
+###usage
+
+`python uciget.py ^[Aa].* -d C:\Users\Will\Documents\Data`
+
+Downloads all datasets that start with A or a to the specified folder
+
+`python uciget.py -c Classification -d C:\Users\Will\Documents\Data`
+
+Downloads all datasets whose default task is classification to the specified folder
+
+
 
 
