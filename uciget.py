@@ -12,10 +12,12 @@ names_suffix = '.names'
 args_def = 'd:bc'
 
 parser = argparse.ArgumentParser(description='Get datasets from UCI repository.')
-parser.add_argument('name', metavar='D', type=str, nargs="+",
+parser.add_argument('-n', dest='name', type=str, nargs="+",
                     help='the name of the dataset [REGEX]')
-parser.add_argument('-d', dest='savedir', 
+parser.add_argument('-d', dest='savedir', type=str,
                     help='directory to save downloaded files')
+parser.add_argument('-c', dest='category', type=str,
+                    help='category (default task) [REGEX]')
 
 
 def get_data(name, savedir):
@@ -74,11 +76,18 @@ def main(argv):
     args = parser.parse_args()
     savedir = args.savedir
     names = args.name
+    category = args.category
+
+    if names is None:
+        names = [''];
 
     if savedir is None:
         savedir = os.getcwd()
     if not savedir.endswith('/') or not savedir.endswith('\\'):
         savedir += '\\'
+
+    if category is None:
+        category = '';
 
     metadata = []
     if os.path.isfile('sets.p'):
@@ -87,15 +96,16 @@ def main(argv):
         metadata = get_meta()
     
     p = re.compile(names[0])
+    cp = re.compile(category)
     sets = []
     for ds in metadata:
-        if p.match(ds['Name']):
+        if p.match(ds['Name']) and cp.match(ds['Default Task']):
             sets.append(ds['Name'])
 
     if len(sets) > 0:
         print "found: " + str(sets)
     else:
-        print "no matches for " + names[0]
+        print "no matches found."
     
     for n in sets:
         get_data(n, savedir)
